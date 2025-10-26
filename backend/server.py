@@ -60,7 +60,7 @@ class AvailabilityCheck(BaseModel):
 
 
 # Booking Routes
-@api_router.post("/bookings", response_model=Booking)
+@api_router.post("/bookings", response_model=Booking, status_code=201)
 async def create_booking(booking_input: BookingCreate):
     # Check if slot is available
     existing_bookings = await db.bookings.find({
