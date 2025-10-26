@@ -52,10 +52,10 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-cream-200/20 pt-8 text-center">
-          <p className="flex items-center justify-center gap-2 text-cream-100">
+          <div className="flex items-center justify-center gap-2 text-cream-100">
             Made with <Heart className="w-4 h-4 fill-current" /> for your special
             day © 2025 Eternal Bliss. All rights reserved.
-          </p>
+          </div>
         </div>
       </div>
     </footer>
