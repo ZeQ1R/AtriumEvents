@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_tests": 7,
-    "passed_tests": 5,
-    "success_rate": "71.4%"
+    "total_tests": 11,
+    "passed_tests": 11,
+    "success_rate": "100.0%"
   },
   "detailed_results": [
     {
@@ -21,9 +21,21 @@
       "method": "POST",
       "endpoint": "bookings",
       "expected_status": 201,
-      "actual_status": 400,
-      "success": false,
-      "response_data": {}
+      "actual_status": 201,
+      "success": true,
+      "response_data": {
+        "id": "e5aaebb6-1af1-42e8-892d-fd1d374bb462",
+        "customer_name": "John & Jane Doe",
+        "email": "test@example.com",
+        "phone": "+1-555-123-4567",
+        "booking_date": "2025-11-25",
+        "time_slot": "evening",
+        "event_type": "Wedding Ceremony",
+        "guest_count": 150,
+        "special_requests": "Vegetarian menu preferred",
+        "status": "pending",
+        "created_at": "2025-10-26T13:34:38.539500+00:00"
+      }
     },
     {
       "test": "Get All Bookings",
@@ -58,8 +70,63 @@
           "special_requests": "",
           "status": "pending",
           "created_at": "2025-10-26T13:33:50.793758+00:00"
+        },
+        {
+          "id": "e5aaebb6-1af1-42e8-892d-fd1d374bb462",
+          "customer_name": "John & Jane Doe",
+          "email": "test@example.com",
+          "phone": "+1-555-123-4567",
+          "booking_date": "2025-11-25",
+          "time_slot": "evening",
+          "event_type": "Wedding Ceremony",
+          "guest_count": 150,
+          "special_requests": "Vegetarian menu preferred",
+          "status": "pending",
+          "created_at": "2025-10-26T13:34:38.539500+00:00"
         }
       ]
+    },
+    {
+      "test": "Get Booking by ID",
+      "method": "GET",
+      "endpoint": "bookings/e5aaebb6-1af1-42e8-892d-fd1d374bb462",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "id": "e5aaebb6-1af1-42e8-892d-fd1d374bb462",
+        "customer_name": "John & Jane Doe",
+        "email": "test@example.com",
+        "phone": "+1-555-123-4567",
+        "booking_date": "2025-11-25",
+        "time_slot": "evening",
+        "event_type": "Wedding Ceremony",
+        "guest_count": 150,
+        "special_requests": "Vegetarian menu preferred",
+        "status": "pending",
+        "created_at": "2025-10-26T13:34:38.539500+00:00"
+      }
+    },
+    {
+      "test": "Update Booking Status",
+      "method": "PUT",
+      "endpoint": "bookings/e5aaebb6-1af1-42e8-892d-fd1d374bb462",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "id": "e5aaebb6-1af1-42e8-892d-fd1d374bb462",
+        "customer_name": "John & Jane Doe",
+        "email": "test@example.com",
+        "phone": "+1-555-123-4567",
+        "booking_date": "2025-11-25",
+        "time_slot": "evening",
+        "event_type": "Wedding Ceremony",
+        "guest_count": 150,
+        "special_requests": "Vegetarian menu preferred",
+        "status": "confirmed",
+        "created_at": "2025-10-26T13:34:38.539500+00:00"
+      }
     },
     {
       "test": "Check Availability",
@@ -88,6 +155,9 @@
         ],
         "2025-10-31": [
           "afternoon"
+        ],
+        "2025-11-25": [
+          "evening"
         ]
       }
     },
@@ -96,9 +166,21 @@
       "method": "POST",
       "endpoint": "bookings",
       "expected_status": 201,
-      "actual_status": 400,
-      "success": false,
-      "response_data": {}
+      "actual_status": 201,
+      "success": true,
+      "response_data": {
+        "id": "51359170-32f5-46f5-bd5f-daf975e39f57",
+        "customer_name": "Test User",
+        "email": "duplicate@example.com",
+        "phone": "+1-555-999-8888",
+        "booking_date": "2025-12-10",
+        "time_slot": "morning",
+        "event_type": "Wedding",
+        "guest_count": 100,
+        "special_requests": "",
+        "status": "pending",
+        "created_at": "2025-10-26T13:34:38.880548+00:00"
+      }
     },
     {
       "test": "Create Duplicate Booking (Should Fail)",
@@ -109,6 +191,28 @@
       "success": true,
       "response_data": {
         "detail": "This time slot is already booked"
+      }
+    },
+    {
+      "test": "Delete Booking",
+      "method": "DELETE",
+      "endpoint": "bookings/51359170-32f5-46f5-bd5f-daf975e39f57",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "message": "Booking deleted successfully"
+      }
+    },
+    {
+      "test": "Delete Booking",
+      "method": "DELETE",
+      "endpoint": "bookings/e5aaebb6-1af1-42e8-892d-fd1d374bb462",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "message": "Booking deleted successfully"
       }
     }
   ]
