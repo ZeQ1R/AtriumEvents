@@ -21,7 +21,7 @@
       "method": "POST",
       "endpoint": "bookings",
       "expected_status": 201,
-      "actual_status": 200,
+      "actual_status": 400,
       "success": false,
       "response_data": {}
     },
@@ -45,6 +45,19 @@
           "special_requests": "Vegetarian menu preferred",
           "status": "pending",
           "created_at": "2025-10-26T13:33:50.634360+00:00"
+        },
+        {
+          "id": "7fdd00a2-4388-45b9-a795-4bd37fcd5419",
+          "customer_name": "Test User",
+          "email": "duplicate@example.com",
+          "phone": "+1-555-999-8888",
+          "booking_date": "2025-10-31",
+          "time_slot": "afternoon",
+          "event_type": "Wedding",
+          "guest_count": 100,
+          "special_requests": "",
+          "status": "pending",
+          "created_at": "2025-10-26T13:33:50.793758+00:00"
         }
       ]
     },
@@ -72,6 +85,9 @@
       "response_data": {
         "2025-11-02": [
           "morning"
+        ],
+        "2025-10-31": [
+          "afternoon"
         ]
       }
     },
@@ -80,7 +96,7 @@
       "method": "POST",
       "endpoint": "bookings",
       "expected_status": 201,
-      "actual_status": 200,
+      "actual_status": 400,
       "success": false,
       "response_data": {}
     },
