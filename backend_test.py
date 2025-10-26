@@ -74,13 +74,14 @@ class WeddingSalonAPITester:
 
     def test_create_booking(self):
         """Test creating a booking"""
-        future_date = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
+        # Use a more unique date to avoid conflicts
+        future_date = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")
         booking_data = {
             "customer_name": "John & Jane Doe",
             "email": "test@example.com",
             "phone": "+1-555-123-4567",
             "booking_date": future_date,
-            "time_slot": "morning",
+            "time_slot": "evening",  # Use evening slot to avoid conflicts
             "event_type": "Wedding Ceremony",
             "guest_count": 150,
             "special_requests": "Vegetarian menu preferred"
