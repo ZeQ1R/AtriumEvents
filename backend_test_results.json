@@ -1,0 +1,99 @@
+{
+  "summary": {
+    "total_tests": 7,
+    "passed_tests": 5,
+    "success_rate": "71.4%"
+  },
+  "detailed_results": [
+    {
+      "test": "Root API",
+      "method": "GET",
+      "endpoint": "",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "message": "Wedding Salon API"
+      }
+    },
+    {
+      "test": "Create Booking",
+      "method": "POST",
+      "endpoint": "bookings",
+      "expected_status": 201,
+      "actual_status": 200,
+      "success": false,
+      "response_data": {}
+    },
+    {
+      "test": "Get All Bookings",
+      "method": "GET",
+      "endpoint": "bookings",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": [
+        {
+          "id": "10cdfca6-8ed8-4c2f-b2c0-a5bbedff9a0c",
+          "customer_name": "John & Jane Doe",
+          "email": "test@example.com",
+          "phone": "+1-555-123-4567",
+          "booking_date": "2025-11-02",
+          "time_slot": "morning",
+          "event_type": "Wedding Ceremony",
+          "guest_count": 150,
+          "special_requests": "Vegetarian menu preferred",
+          "status": "pending",
+          "created_at": "2025-10-26T13:33:50.634360+00:00"
+        }
+      ]
+    },
+    {
+      "test": "Check Availability",
+      "method": "POST",
+      "endpoint": "availability",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "date": "2025-11-05",
+        "morning_available": true,
+        "afternoon_available": true,
+        "evening_available": true
+      }
+    },
+    {
+      "test": "Get Availability Range",
+      "method": "GET",
+      "endpoint": "availability/range?start_date=2025-10-27&end_date=2025-11-25",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "2025-11-02": [
+          "morning"
+        ]
+      }
+    },
+    {
+      "test": "Create First Booking",
+      "method": "POST",
+      "endpoint": "bookings",
+      "expected_status": 201,
+      "actual_status": 200,
+      "success": false,
+      "response_data": {}
+    },
+    {
+      "test": "Create Duplicate Booking (Should Fail)",
+      "method": "POST",
+      "endpoint": "bookings",
+      "expected_status": 400,
+      "actual_status": 400,
+      "success": true,
+      "response_data": {
+        "detail": "This time slot is already booked"
+      }
+    }
+  ]
+}
