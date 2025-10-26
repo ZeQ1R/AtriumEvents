@@ -130,13 +130,14 @@ class WeddingSalonAPITester:
 
     def test_duplicate_booking_prevention(self):
         """Test that duplicate bookings are prevented"""
-        future_date = (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d")
+        # Use a very unique date to avoid conflicts
+        future_date = (datetime.now() + timedelta(days=45)).strftime("%Y-%m-%d")
         booking_data = {
             "customer_name": "Test User",
             "email": "duplicate@example.com",
             "phone": "+1-555-999-8888",
             "booking_date": future_date,
-            "time_slot": "afternoon",
+            "time_slot": "morning",  # Use morning slot for this test
             "event_type": "Wedding",
             "guest_count": 100
         }
