@@ -1,14 +1,14 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from pydantic import BaseModel, Field, ConfigDict, EmailStr
+from typing import List, Optional
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 
 
 ROOT_DIR = Path(__file__).parent
@@ -27,44 +27,129 @@ api_router = APIRouter(prefix="/api")
 
 
 # Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
+class BookingCreate(BaseModel):
+    customer_name: str
+    email: EmailStr
+    phone: str
+    booking_date: str
+    time_slot: str  # morning, afternoon, evening
+    event_type: str
+    guest_count: int
+    special_requests: Optional[str] = ""
+
+class Booking(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    customer_name: str
+    email: EmailStr
+    phone: str
+    booking_date: str
+    time_slot: str
+    event_type: str
+    guest_count: int
+    special_requests: Optional[str] = ""
+    status: str = "pending"  # pending, confirmed, cancelled
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
+class BookingUpdate(BaseModel):
+    status: str
 
-# Add your routes to the router instead of directly to app
+class AvailabilityCheck(BaseModel):
+    booking_date: str
+
+
+# Booking Routes
+@api_router.post("/bookings", response_model=Booking)
+async def create_booking(booking_input: BookingCreate):
+    # Check if slot is available
+    existing_bookings = await db.bookings.find({
+        "booking_date": booking_input.booking_date,
+        "time_slot": booking_input.time_slot,
+        "status": {"$ne": "cancelled"}
+    }).to_list(None)
+    
+    if existing_bookings:
+        raise HTTPException(status_code=400, detail="This time slot is already booked")
+    
+    booking_dict = booking_input.model_dump()
+    booking_obj = Booking(**booking_dict)
+    
+    doc = booking_obj.model_dump()
+    await db.bookings.insert_one(doc)
+    
+    return booking_obj
+
+@api_router.get("/bookings", response_model=List[Booking])
+async def get_all_bookings():
+    bookings = await db.bookings.find({}, {"_id": 0}).to_list(1000)
+    return bookings
+
+@api_router.get("/bookings/{booking_id}", response_model=Booking)
+async def get_booking(booking_id: str):
+    booking = await db.bookings.find_one({"id": booking_id}, {"_id": 0})
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    return booking
+
+@api_router.put("/bookings/{booking_id}", response_model=Booking)
+async def update_booking(booking_id: str, update: BookingUpdate):
+    result = await db.bookings.update_one(
+        {"id": booking_id},
+        {"$set": {"status": update.status}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    
+    booking = await db.bookings.find_one({"id": booking_id}, {"_id": 0})
+    return booking
+
+@api_router.delete("/bookings/{booking_id}")
+async def delete_booking(booking_id: str):
+    result = await db.bookings.delete_one({"id": booking_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    
+    return {"message": "Booking deleted successfully"}
+
+@api_router.post("/availability")
+async def check_availability(check: AvailabilityCheck):
+    bookings = await db.bookings.find({
+        "booking_date": check.booking_date,
+        "status": {"$ne": "cancelled"}
+    }, {"_id": 0}).to_list(None)
+    
+    booked_slots = [b["time_slot"] for b in bookings]
+    
+    return {
+        "date": check.booking_date,
+        "morning_available": "morning" not in booked_slots,
+        "afternoon_available": "afternoon" not in booked_slots,
+        "evening_available": "evening" not in booked_slots
+    }
+
+@api_router.get("/availability/range")
+async def get_availability_range(start_date: str, end_date: str):
+    bookings = await db.bookings.find({
+        "booking_date": {"$gte": start_date, "$lte": end_date},
+        "status": {"$ne": "cancelled"}
+    }, {"_id": 0}).to_list(None)
+    
+    # Group bookings by date
+    bookings_by_date = {}
+    for booking in bookings:
+        date = booking["booking_date"]
+        if date not in bookings_by_date:
+            bookings_by_date[date] = []
+        bookings_by_date[date].append(booking["time_slot"])
+    
+    return bookings_by_date
+
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
-
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
-
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+    return {"message": "Wedding Salon API"}
 
 # Include the router in the main app
 app.include_router(api_router)
