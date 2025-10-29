@@ -5,6 +5,18 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
+
+# Load environment variables
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
+
+# Determine if we're in production
+IS_PRODUCTION = os.getenv('ENVIRONMENT', 'development') == 'production'
+
+# Set up MongoDB connection
+mongo_url = os.getenv('PROD_MONGO_URL' if IS_PRODUCTION else 'MONGO_URL')
+db_name = os.getenv('PROD_DB_NAME' if IS_PRODUCTION else 'DB_NAME')
+cors_origins = os.getenv('PROD_CORS_ORIGINS' if IS_PRODUCTION else 'CORS_ORIGINS')
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
 import uuid

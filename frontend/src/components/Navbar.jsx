@@ -45,14 +45,6 @@ const Navbar = ({ scrolled }) => {
                 {link.name}
               </a>
             ))}
-            <a href="/admin">
-              <Button
-                className="bg-navy-green hover:bg-opacity-90 text-white rounded-full px-6"
-                data-testid="admin-btn"
-              >
-                Admin
-              </Button>
-            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -84,14 +76,7 @@ const Navbar = ({ scrolled }) => {
                 {link.name}
               </a>
             ))}
-            <a href="/admin">
-              <Button
-                className="w-full bg-navy-green hover:bg-opacity-90 text-white rounded-full"
-                data-testid="mobile-admin-btn"
-              >
-                Admin
-              </Button>
-            </a>
+
           </div>
         </div>
       )}

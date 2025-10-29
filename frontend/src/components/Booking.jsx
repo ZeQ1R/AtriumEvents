@@ -10,13 +10,17 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { CalendarIcon, Clock } from "lucide-react";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
 const API = `${BACKEND_URL}/api`;
 
 const Booking = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [availability, setAvailability] = useState(null);
+    const [availability, setAvailability] = useState({
+      morning_available: true,
+      afternoon_available: true,
+      evening_available: true
+    });
   const [formData, setFormData] = useState({
     customer_name: "",
     email: "",
@@ -27,6 +31,18 @@ const Booking = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  // Debug: log state changes
+  useEffect(() => {
+    console.log("selectedDate:", selectedDate);
+    console.log("availability:", availability);
+    console.log("selectedTimeSlot:", selectedTimeSlot);
+  }, [selectedDate, availability, selectedTimeSlot]);
+
+  const handleTimeSlotClick = (slot) => {
+    console.log("Time slot clicked:", slot);
+    if (slot.available) setSelectedTimeSlot(slot.value);
+  };
+
   useEffect(() => {
     if (selectedDate) {
       checkAvailability();
@@ -36,13 +52,25 @@ const Booking = () => {
   const checkAvailability = async () => {
     try {
       const dateStr = format(selectedDate, "yyyy-MM-dd");
+      console.log("Checking availability for date:", dateStr);
+      console.log("API URL:", `${API}/availability`);
+      
       const response = await axios.post(`${API}/availability`, {
         booking_date: dateStr,
       });
+      
+      console.log("Availability response:", response.data);
       setAvailability(response.data);
       setSelectedTimeSlot(""); // Reset time slot when date changes
     } catch (error) {
-      toast.error("Failed to check availability");
+      console.error("Availability check error:", error);
+      toast.error("Failed to check availability. Please make sure the backend server is running.");
+      // Set default availability if backend fails
+      setAvailability({
+        morning_available: true,
+        afternoon_available: true,
+        evening_available: true
+      });
     }
   };
 

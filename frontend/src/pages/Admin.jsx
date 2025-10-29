@@ -86,15 +86,29 @@ const Admin = () => {
             <h1 className="text-5xl font-bold text-navy-green mb-2" data-testid="admin-title">Admin Dashboard</h1>
             <p className="text-gray-600">Manage all wedding bookings</p>
           </div>
-          <Button
-            onClick={() => navigate("/")}
-            variant="outline"
-            className="border-navy-green text-navy-green hover:bg-navy-green hover:text-white transition-all"
-            data-testid="back-home-btn"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => navigate("/")}
+              variant="outline"
+              className="border-navy-green text-navy-green hover:bg-navy-green hover:text-white transition-all"
+              data-testid="back-home-btn"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Button>
+            <Button
+              onClick={() => {
+                localStorage.removeItem("isAdmin");
+                navigate("/login");
+                toast.success("Logged out successfully");
+              }}
+              variant="outline"
+              className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-all"
+              data-testid="logout-btn"
+            >
+              Logout
+            </Button>
+          </div>
         </div>
 
         <div className="grid gap-6" data-testid="bookings-container">
