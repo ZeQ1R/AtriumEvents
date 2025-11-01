@@ -39,7 +39,7 @@ const About = () => {
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-navy-green mb-4"
             data-testid="about-title"
           >
-            Why Choose Eternal Bliss?
+            Why Choose Atrium Events?
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto" data-testid="about-description">
             We transform your wedding vision into reality with elegance,

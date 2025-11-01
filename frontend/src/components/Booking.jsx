@@ -10,10 +10,12 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { CalendarIcon, Clock } from "lucide-react";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Booking = () => {
+  console.log("Backend URL:", BACKEND_URL);
+  console.log("API endpoint:", API);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
     const [availability, setAvailability] = useState({
@@ -30,18 +32,6 @@ const Booking = () => {
     special_requests: "",
   });
   const [loading, setLoading] = useState(false);
-
-  // Debug: log state changes
-  useEffect(() => {
-    console.log("selectedDate:", selectedDate);
-    console.log("availability:", availability);
-    console.log("selectedTimeSlot:", selectedTimeSlot);
-  }, [selectedDate, availability, selectedTimeSlot]);
-
-  const handleTimeSlotClick = (slot) => {
-    console.log("Time slot clicked:", slot);
-    if (slot.available) setSelectedTimeSlot(slot.value);
-  };
 
   useEffect(() => {
     if (selectedDate) {

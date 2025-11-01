@@ -29,17 +29,17 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Address",
-      content: "123 Wedding Boulevard, Dream City, DC 12345",
+      content: "123 Zhelino, Tetovo",
     },
     {
       icon: Phone,
       title: "Phone",
-      content: "+1 (555) 123-4567",
+      content: "+389 70-123-456",
     },
     {
       icon: Mail,
       title: "Email",
-      content: "hello@eternalbliss.com",
+      content: "atriumevents@gmail.com",
     },
     {
       icon: Clock,

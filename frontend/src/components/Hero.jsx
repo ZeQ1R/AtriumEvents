@@ -67,7 +67,7 @@ const Hero = () => {
         </div>
 
         {/* Scroll indicator */}
-        <div
+        {/* <div
           className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 transition-all duration-1000 delay-500 ${
             isVisible ? "opacity-100" : "opacity-0"
           }`}
@@ -76,7 +76,7 @@ const Hero = () => {
             <span className="text-gray-500 text-sm mb-2">Scroll Down</span>
             <ChevronDown className="text-navy-green" size={32} />
           </a>
-        </div>
+        </div> */}
       </div>
     </section>
   );

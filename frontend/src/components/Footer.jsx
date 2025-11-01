@@ -1,5 +1,6 @@
 import React from "react";
 import { Heart } from "lucide-react";
+import logo from "../images/atrium_logo2.jpg";
 
 const Footer = () => {
   return (
@@ -7,7 +8,10 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
-            <h3 className="text-2xl font-bold mb-4">Eternal Bliss</h3>
+            <div className="w-28 h-28">
+              <img src={logo} />
+            </div>
+            
             <p className="text-cream-100">
               Creating unforgettable wedding experiences with elegance and
               sophistication.
@@ -43,10 +47,10 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-cream-100">
-              <li>123 Wedding Boulevard</li>
-              <li>Dream City, DC 12345</li>
-              <li>+1 (555) 123-4567</li>
-              <li>hello@eternalbliss.com</li>
+              <li>123 Zhelino, Tetovo</li>
+              {/* <li>Dream City, DC 12345</li> */}
+              <li>+389 70-123-456</li>
+              <li>atriumevents@gmail.com</li>
             </ul>
           </div>
         </div>
@@ -54,7 +58,7 @@ const Footer = () => {
         <div className="border-t border-cream-200/20 pt-8 text-center">
           <div className="flex items-center justify-center gap-2 text-cream-100">
             Made with <Heart className="w-4 h-4 fill-current" /> for your special
-            day © 2025 Eternal Bliss. All rights reserved.
+            day © 2025 Atrium Events. All rights reserved.
           </div>
         </div>
       </div>

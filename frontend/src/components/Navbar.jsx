@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
+import logo from "../images/atrium_logo.png";
 import { Button } from "@/components/ui/button";
 
 const Navbar = ({ scrolled }) => {
@@ -30,7 +31,7 @@ const Navbar = ({ scrolled }) => {
             className="text-2xl lg:text-3xl font-bold text-navy-green"
             data-testid="logo"
           >
-            Eternal Bliss
+            <img src={logo} alt="" />
           </a>
 
           {/* Desktop Menu */}
