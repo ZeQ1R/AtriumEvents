@@ -11,7 +11,7 @@ const Navbar = ({ scrolled }) => {
     { name: "About", href: "#about" },
     { name: "Services", href: "#services" },
     { name: "Gallery", href: "#gallery" },
-    { name: "Booking", href: "#booking" },
+    // { name: "Booking", href: "#booking" },
     { name: "Contact", href: "#contact" },
   ];
 
